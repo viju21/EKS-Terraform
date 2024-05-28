@@ -6,9 +6,6 @@ on:
   push:
     branches:
       - main  # Or your desired deployment branch
-    paths:
-      - 'terraform/**'  # Trigger only on changes to the Terraform folder
-      - '.github/workflows/terraform_CICD.yml'
 
 permissions:
   id-token: write
@@ -37,16 +34,13 @@ jobs:
           aws-region: ap-south-1
 
       - name: Terraform Init
-        working-directory: terraform  # Navigate to the Terraform folder
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: terraform
         run: terraform plan
         continue-on-error: true # If you want to continue even if the plan fails (for logging purposes)
 
       - name: Terraform Apply
-        working-directory: terraform
         run: terraform apply -auto-approve
 
       - name: Install EBS CSI Driver
