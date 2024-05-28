@@ -46,7 +46,11 @@ jobs:
       - name: Install EBS CSI Driver
         run: |
           aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name ${{ secrets.CLUSTER_NAME }}
-          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.31"
-          kubectl apply -f ../k8s-manifests/database.yaml
-          kubectl apply -f ../k8s-manifests/secret.yaml
-          kubectl apply -f ../k8s-manifests/service.yaml
+          git clone https://github.com/fredritchie/3-tier-eks-manifests.git
+          cd 3-tier-eks-manifests
+          kubectl apply -f frontend_deployment.yaml
+          kubectl apply -f backend.yaml
+          kubectl apply -f service.yaml
+          kubectl apply -f secret.yaml
+          kubectl apply -f database.yaml
+
