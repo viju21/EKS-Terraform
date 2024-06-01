@@ -1,12 +1,12 @@
-resource "aws_eks_node_group" "webapp_node_group" {
+resource "aws_eks_node_group" "webapp_frontend_node_group" {
   cluster_name    = aws_eks_cluster.webapp.name
-  node_group_name = "webapp_node_group"
+  node_group_name = "webapp_frontend_node_group"
   node_role_arn   = aws_iam_role.AmazonEKSNodeRole.arn
   subnet_ids      = [aws_subnet.subnet-public-1.id, aws_subnet.subnet-public-2.id]
   instance_types  = ["t2.medium"]
 
   scaling_config {
-    desired_size = 4
+    desired_size = 2
     max_size     = 5
     min_size     = 1
   }
@@ -14,6 +14,11 @@ resource "aws_eks_node_group" "webapp_node_group" {
   update_config {
     max_unavailable = 2
   }
+    taint { 
+      key = "subnet"
+      value = "public"
+      effect = "NO_SCHEDULE"
+    }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
   # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
