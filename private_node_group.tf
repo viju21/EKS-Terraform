@@ -14,6 +14,9 @@ resource "aws_eks_node_group" "webapp_backend_DB_node_group" {
   update_config {
     max_unavailable = 2
   }
+  labels = {
+    scope = "private"
+  }
     taint { 
       key = "subnet"
       value = "private"
